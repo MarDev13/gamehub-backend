@@ -1,7 +1,9 @@
 import { Controller, Get, UseGuards, Req } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { User } from '@prisma/client';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
+@ApiBearerAuth()
 @Controller('user')
 @UseGuards(JwtAuthGuard)
 export class UserController {
