@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('GameHub API')
-    .setDescription('Documentación de la API del proyecto GameHub, incluyendo Auth, Users y Roles.')
+    .setDescription('Documentación de la API del proyecto GameHub, incluyendo Auth, Users, Genres y Roles.')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
