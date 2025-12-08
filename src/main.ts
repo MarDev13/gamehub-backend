@@ -30,6 +30,7 @@ async function bootstrap() {
   await app.listen(port);
   const logger = new Logger('Bootstrap');
   logger.log(`Application running on port ${port} in ${env} mode`);
+  
 }
 bootstrap().catch((error) => {
   console.error('Error during application bootstrap:', error);

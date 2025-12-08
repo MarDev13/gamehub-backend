@@ -44,7 +44,8 @@ export class AuthService {
     }
     async login(dto: LoginDto){
         const user = await this.prisma.user.findUnique({
-            where: { email: dto.email }
+            where: { email: dto.email },
+            include: { role: true }, 
         });
         if (!user){
             throw new BadRequestException('Credenciales incorrectas');
@@ -53,7 +54,7 @@ export class AuthService {
         if (!isPasswordValid){
             throw new BadRequestException('Credenciales incorrectas');
         }
-        const payload = { sub: user.id, email: user.email, role: RoleName};
+        const payload = { sub: user.id, email: user.email, username: user.userName,  role: user.role.name };
         const token = await this.jwtService.signAsync(payload);
         return {
             message: 'Inicio de sesión exitoso',
@@ -62,7 +63,7 @@ export class AuthService {
                 id: user.id,
                 email: user.email,
                 userName: user.userName,
-                role: RoleName
+                role: user.role.name,
             },
         };
     }
