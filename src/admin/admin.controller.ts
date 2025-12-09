@@ -4,7 +4,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Role } from 'src/auth/decorators/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
-import { CreateGenreDto } from './dto/create-genre.dto';
+import { CreateGenreDto } from './genres/dto/create-genre.dto';
 
 @ApiTags('admin')
 @ApiBearerAuth()

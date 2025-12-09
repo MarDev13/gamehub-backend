@@ -12,12 +12,18 @@ export class AuthService {
     constructor(private readonly prisma: PrismaService, private readonly jwtService: JwtService) {}
 
     async register(dto: RegisterDto) {
-        const existingUser = await this.prisma.user.findUnique({
+        const existingEmail = await this.prisma.user.findUnique({
             where: { email: dto.email }
         });
 
-        if (existingUser) {
+        if (existingEmail) {
             throw new BadRequestException('El email ya está registrado');
+        }
+        const  existingUserName = await this.prisma.user.findUnique({
+            where: { userName: dto.userName}
+        })
+        if(existingUserName) {
+            throw new BadRequestException('El nombre de usuario ya está en uso');
         }
 
         const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -26,7 +32,7 @@ export class AuthService {
             data: {
                 email: dto.email,
                 password: hashedPassword,
-                userName: dto.username,
+                userName: dto.userName,
                 firstName: dto.firstName,
                 lastName: dto.lastName,
                 role: {

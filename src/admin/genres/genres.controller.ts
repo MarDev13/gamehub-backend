@@ -4,8 +4,8 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/auth/decorators/roles.decorator';
 import { ApiTags, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { GenresService } from './genres.service';
-import { CreateGenreDto } from 'src/admin/dto/create-genre.dto';
-import { UpdateGenreDto } from '../dto/update-genre.dto';
+import { CreateGenreDto } from 'src/admin/genres/dto/create-genre.dto';
+import { UpdateGenreDto } from './dto/update-genre.dto';
 
 @ApiTags('admin - genres')
 @ApiBearerAuth()
