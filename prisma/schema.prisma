@@ -7,8 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 enum RoleName {
   USER
   ADMIN
@@ -21,18 +19,18 @@ model Role {
 }
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
-  email     String   @unique
+  id        String    @id @default(uuid()) @db.Uuid
+  email     String    @unique
   password  String
-  userName  String   @unique
+  userName  String    @unique
   firstName String
   lastName  String
-  roleId    String   @db.Uuid
-  role      Role     @relation(fields: [roleId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Session Session[]
+  roleId    String    @db.Uuid
+  role      Role      @relation(fields: [roleId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  orders    Order[]
+  Session   Session[]
 
   @@index([roleId])
 }
@@ -57,35 +55,35 @@ model Platform {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  games     Game[]
+  games Game[]
 }
 
 model Game {
-  id            String      @id @default(uuid()) @db.Uuid
-  title         String
-  description   String?
-  imageUrl      String?
-  
-  price         Float       
-  salePrice     Float?      
-  discountPct   Int?         
-  onSale        Boolean      @default(false)
+  id          String  @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  imageUrl    String?
 
-  saleStartDate DateTime?    
-  saleEndDate   DateTime?    
+  price       Float
+  salePrice   Float?
+  discountPct Int?
+  onSale      Boolean @default(false)
 
-  stock         Int          @default(0) 
-  isPublished   Boolean      @default(true) 
-  status        GameStatus   @default(ACTIVE) 
+  saleStartDate DateTime?
+  saleEndDate   DateTime?
 
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  stock       Int        @default(0)
+  isPublished Boolean    @default(true)
+  status      GameStatus @default(ACTIVE)
 
-  genreId       String       @db.Uuid
-  genre         Genre        @relation(fields: [genreId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  tags          Tag[]
-  platforms     Platform[]
+  genreId String @db.Uuid
+  genre   Genre  @relation(fields: [genreId], references: [id])
+
+  tags      Tag[]
+  platforms Platform[]
 }
 
 enum GameStatus {
@@ -94,23 +92,43 @@ enum GameStatus {
   OUT_OF_STOCK
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id String @id @default(uuid()) @db.Uuid
+
+  total  Float
+  status OrderStatus @default(PENDING)
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
 
 model Tag {
   id        String   @id @default(uuid()) @db.Uuid
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  games     Game[]
+
+  games Game[]
 }
 
-
 model Genre {
-  id        String  @id @default(uuid()) @db.Uuid
-  name      String  @unique
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  games     Game[]   
+  games Game[]
 }
-

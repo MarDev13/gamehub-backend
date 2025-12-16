@@ -7,10 +7,11 @@ import { GamesController } from './games/games.controller';
 import { GamesService } from './games/games.service';
 import { GamesModule } from './games/games.module';
 import { PlatformsModule } from './platforms/platforms.module';
+import { UsersModule } from './users/users.module';
 @Module({
     controllers: [AdminController, GamesController],
     providers: [AdminService, PrismaService, GamesService],
     exports: [AdminService],
-    imports: [TagsModule, GamesModule, PlatformsModule],
+    imports: [TagsModule, GamesModule, PlatformsModule, UsersModule],
 })
 export class AdminModule {}
