@@ -16,14 +16,14 @@ export class GenresController {
     constructor(private readonly genresService: GenresService){}
 
     @Role('ADMIN')
-    @ApiBody({
+    @Post()
+        @ApiBody({
     schema: {
       example: {
       name: "Acción"
       }
     }
   })
-    @Post()
     create(@Body() dto: CreateGenreDto){
         return this.genresService.createGenre(dto);
     }

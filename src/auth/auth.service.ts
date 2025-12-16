@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from "bcryptjs";
 import { RegisterDto } from "./dto/register.dto";
@@ -54,11 +54,11 @@ export class AuthService {
             include: { role: true }, 
         });
         if (!user){
-            throw new BadRequestException('Credenciales incorrectas');
+            throw new UnauthorizedException('Credenciales incorrectas');
         }
         const isPasswordValid = await bcrypt.compare(dto.password, user.password);
         if (!isPasswordValid){
-            throw new BadRequestException('Credenciales incorrectas');
+            throw new UnauthorizedException('Credenciales incorrectas');
         }
         const payload = { sub: user.id, email: user.email, username: user.userName,  role: user.role.name };
         const token = await this.jwtService.signAsync(payload);

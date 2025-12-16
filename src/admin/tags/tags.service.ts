@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -30,14 +30,17 @@ export class TagsService {
         const tag = await this.prisma.tag.findUnique({
             where: { id},
         });
-        if (!tag) throw new BadRequestException('Etiqueta no encontrada');
-        return tag;
+        if (!tag) throw new NotFoundException('Etiqueta no encontrada');
+        return {
+            message: 'Etiqueta encontrada con éxito',
+            tag,
+        }
     }
     async updateTag(id: string, dto: UpdateTagDto){
         const tag = await this.prisma.tag.findUnique({
             where: { id},
         });
-        if (!tag) throw new BadRequestException('Etiqueta no encontrada');
+        if (!tag) throw new NotFoundException('Etiqueta no encontrada');
         const updatedTag = await this.prisma.tag.update({
             where: { id },
             data: dto,
@@ -51,7 +54,7 @@ export class TagsService {
         const tag = await this.prisma.tag.findUnique({
             where: { id}
         });
-        if (!tag) throw new BadRequestException('Etiqueta no encontrada');
+        if (!tag) throw new NotFoundException('Etiqueta no encontrada');
         const deleteTag = await this.prisma.tag.delete({
             where: { id },
         });

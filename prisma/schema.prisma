@@ -51,19 +51,49 @@ model Session {
   @@index([userId])
 }
 
-model Game {
-  id          String   @id @default(uuid()) @db.Uuid
-  title       String
-  description String?
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Platform {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  genreId     String   @db.Uuid
-  genre       Genre    @relation(fields: [genreId], references: [id])
-
-  tags        Tag[]    
+  games     Game[]
 }
+
+model Game {
+  id            String      @id @default(uuid()) @db.Uuid
+  title         String
+  description   String?
+  imageUrl      String?
+  
+  price         Float       
+  salePrice     Float?      
+  discountPct   Int?         
+  onSale        Boolean      @default(false)
+
+  saleStartDate DateTime?    
+  saleEndDate   DateTime?    
+
+  stock         Int          @default(0) 
+  isPublished   Boolean      @default(true) 
+  status        GameStatus   @default(ACTIVE) 
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  genreId       String       @db.Uuid
+  genre         Genre        @relation(fields: [genreId], references: [id])
+
+  tags          Tag[]
+  platforms     Platform[]
+}
+
+enum GameStatus {
+  ACTIVE
+  HIDDEN
+  OUT_OF_STOCK
+}
+
 
 model Tag {
   id        String   @id @default(uuid()) @db.Uuid
@@ -81,6 +111,6 @@ model Genre {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  games     Game[]   // un género puede tener muchos juegos
+  games     Game[]   
 }
 

@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from "@nestjs/common";
+import { Injectable, BadRequestException, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateGenreDto } from "src/admin/genres/dto/create-genre.dto";
 import { UpdateGenreDto } from "./dto/update-genre.dto";
@@ -30,7 +30,7 @@ export class GenresService {
         const genre = await this.prisma.genre.findUnique({
             where: { id },
         });
-        if (!genre) throw new BadRequestException('Género no encontrado');
+        if (!genre) throw new NotFoundException('Género no encontrado');
         return genre;
     }
 
@@ -38,7 +38,7 @@ export class GenresService {
         const genre = await this.prisma.genre.findUnique({
             where: { id },
         });
-        if (!genre) throw new BadRequestException('Género no encontrado');
+        if (!genre) throw new NotFoundException('Género no encontrado');
         const updateGenre = await this.prisma.genre.update({
             where: { id },
             data: dto,
@@ -52,7 +52,7 @@ export class GenresService {
         const genre = await this.prisma.genre.findUnique({
             where: { id }
         });
-        if (!genre) throw new BadRequestException('Género no encontrado');
+        if (!genre) throw new NotFoundException('Género no encontrado');
         const deleteGenre =await this.prisma.genre.delete({
             where: { id }
         });
