@@ -7,6 +7,7 @@ import { TagsService } from './tags.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @ApiTags('admin - tags')
 @ApiBearerAuth()
@@ -37,18 +38,18 @@ export class TagsController {
 
     @Role('ADMIN')
     @Get(':id')
-    findById(@Param('id') id: string){
+    findById(@Param('id', new ParseUUIDPipe()) id: string){
         return this.tagsService.findById(id);
     }
     @Role('ADMIN')
     @Patch(':id')
-    updateTag(@Param('id') id: string, @Body() dto: UpdateTagDto){
+    updateTag(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateTagDto){
         return this.tagsService.updateTag(id, dto);
     }
 
     @Role('ADMIN')
     @Delete(':id')
-    deleteTag(@Param('id') id: string) {
+    deleteTag(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.tagsService.deleteTag(id);
     }
 }

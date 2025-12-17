@@ -7,6 +7,7 @@ import { PlatformsService } from './platforms.service';
 import { UpdatePlatformDto } from './dto/update-platform.dto';
 import { CreatePlatformDto } from './dto/create-platform.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @ApiTags('admin - platforms')
 @ApiBearerAuth()
@@ -30,19 +31,19 @@ export class PlatformsController {
 
     @Role('ADMIN')
     @Get(':id')
-    findById(@Param('id') id: string) {
+    findById(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.platformService.findById(id);
     }
 
     @Role('ADMIN')
     @Patch(':id')
-    update(@Param('id') id: string, @Body() dto: UpdatePlatformDto) {
+    update(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdatePlatformDto) {
         return this.platformService.updatePlatform(id, dto);
     }
 
     @Role('ADMIN')
     @Delete(':id')
-    delete(@Param('id') id: string) {
+    delete(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.platformService.deletePlatform(id);
     }
 

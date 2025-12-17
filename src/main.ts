@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -36,8 +38,12 @@ async function bootstrap() {
       forbidNonWhitelisted: false,
       transform: true,
     }),
-  );
 
+  );
+  app.useGlobalFilters(
+    new PrismaExceptionFilter(),
+    new HttpExceptionFilter(),
+  );
   await app.listen(port);
   const logger = new Logger('Bootstrap');
   logger.log(`Application running on port ${port} in ${env} mode`);

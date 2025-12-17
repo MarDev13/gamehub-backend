@@ -7,6 +7,7 @@ import { GamesService } from './games.service';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { CreateGameDto } from './dto/create-game.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @ApiTags('admin - games')
 @ApiBearerAuth()
@@ -30,26 +31,26 @@ export class GamesController {
 
     @Role('ADMIN')
     @Get(':id')
-    findById(@Param('id') id: string) {
+    findById(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.gameService.findById(id);
     }
 
     @Role('ADMIN')
     @Patch(':id')
-    updateGame(@Param('id') id: string, @Body() dto: UpdateGameDto){
+    updateGame(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateGameDto){
         return this.gameService.updateGame(id,dto);
     }
 
     @Role('ADMIN')
     @Post(':id/publish')
-    publishGame(@Param('id') id: string){
+    publishGame(@Param('id', new ParseUUIDPipe()) id: string){
         return this.gameService.togglePublish(id)
     }
 
 
     @Role('ADMIN')
     @Delete(':id')
-    deleteGame(@Param('id') id: string){
+    deleteGame(@Param('id', new ParseUUIDPipe()) id: string){
         return this.gameService.deleteGame(id);
     }
 }

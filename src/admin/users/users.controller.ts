@@ -6,6 +6,7 @@ import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UsersService } from './users.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @ApiTags('admin - users')
 @ApiBearerAuth()
@@ -23,18 +24,18 @@ export class UsersController {
 
     @Role('ADMIN')
     @Get(':id')
-    findById(@Param('id') id: string) {
+    findById(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.userService.findById(id);
     }
     @Role('ADMIN')
     @Get(':id/orders')
-    findOrdersByUser(@Param('id') id: string) {
+    findOrdersByUser(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.userService.findOrdersByUser(id);
     }
 
     @Role('ADMIN')
     @Patch(':id')
-    updateRole(@Param('id') id: string, @Body() dto: UpdateUserRoleDto) {
+    updateRole(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateUserRoleDto) {
         return this.userService.updateRole(id, dto);
     }
 

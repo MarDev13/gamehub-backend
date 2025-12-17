@@ -7,6 +7,7 @@ import { GenresService } from './genres.service';
 import { CreateGenreDto } from 'src/admin/genres/dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ParseUUIDPipe } from '@nestjs/common';
 
 @ApiTags('admin - genres')
 @ApiBearerAuth()
@@ -37,7 +38,7 @@ export class GenresController {
 
     @Role('ADMIN')
     @Get(':id')
-    findById(@Param('id') id: string){
+    findById(@Param('id', new ParseUUIDPipe()) id: string){
         return this.genresService.findById(id);
     }
 
@@ -50,13 +51,13 @@ export class GenresController {
     }
   })
   @Patch(':id')
-  updateGenre(@Param('id') id: string, @Body() dto: UpdateGenreDto) {
+  updateGenre(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateGenreDto) {
     return this.genresService.updateGenre(id, dto);
   }
 
   @Role('ADMIN')
   @Delete(':id')
-  deleteGenre(@Param('id') id: string){
+  deleteGenre(@Param('id', new ParseUUIDPipe()) id: string){
     return this.genresService.deleteGenre(id);
   }
 }
