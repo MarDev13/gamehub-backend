@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/auth/decorators/roles.decorator';
@@ -6,6 +6,7 @@ import { ApiTags, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { GenresService } from './genres.service';
 import { CreateGenreDto } from 'src/admin/genres/dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @ApiTags('admin - genres')
 @ApiBearerAuth()
@@ -30,8 +31,8 @@ export class GenresController {
 
     @Role('ADMIN')
     @Get()
-    findAll() {
-        return this.genresService.findAll();
+    findAll(@Query() pagination: PaginationDto) {
+        return this.genresService.findAll(pagination);
     }
 
     @Role('ADMIN')

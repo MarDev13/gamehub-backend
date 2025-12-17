@@ -3,6 +3,8 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { CreateGameDto } from './dto/create-game.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { GameStatus } from '@prisma/client';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { buildPagination } from 'src/common/utils/pagination.utils';
 
 @Injectable()
 export class GamesService {
@@ -91,15 +93,27 @@ export class GamesService {
         };
     }
 
-    async findAll() {
-        return this.prisma.game.findMany({
-            orderBy: { title: 'asc' },
-            include: {
-                genre: true,
-                platforms: true,
-                tags: true,
-            }
-        });
+    async findAll(pagination: PaginationDto) {
+        const { skip, take, orderBy } = buildPagination(pagination);
+        const [items, total] = await this.prisma.$transaction([
+            this.prisma.game.findMany({
+                skip,
+                take,
+                orderBy,
+                include: {
+                    genre: true,
+                    platforms: true,
+                    tags: true,
+                }
+            }),
+            this.prisma.game.count(),
+        ]);
+        return {
+            page: pagination.page,
+            limit: pagination.limit,
+            total,
+            items,
+        };
     }
 
     async findById(id: string) {
@@ -211,17 +225,17 @@ export class GamesService {
             where: { id },
         });
         if (!game) throw new NotFoundException('Juego no encontrado')
-        
-            const updatedGame = await this.prisma.game.update({
-                where: { id },
-                data:{
-                    isPublished: !game.isPublished
-                },
-            });
-            return {
-                message: `Juego ${updatedGame.isPublished ? 'publicado' : 'ocultado'} con éxito`,
-                game: updatedGame,
-            };
+
+        const updatedGame = await this.prisma.game.update({
+            where: { id },
+            data: {
+                isPublished: !game.isPublished
+            },
+        });
+        return {
+            message: `Juego ${updatedGame.isPublished ? 'publicado' : 'ocultado'} con éxito`,
+            game: updatedGame,
+        };
     }
 
 

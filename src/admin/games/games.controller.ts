@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/auth/decorators/roles.decorator';
@@ -6,6 +6,7 @@ import { ApiTags, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { GamesService } from './games.service';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { CreateGameDto } from './dto/create-game.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @ApiTags('admin - games')
 @ApiBearerAuth()
@@ -23,8 +24,8 @@ export class GamesController {
 
     @Role('ADMIN')
     @Get()
-    findAll() {
-        return this.gameService.findAll();
+    findAll(@Query() pagination: PaginationDto) {
+        return this.gameService.findAll(pagination);
     }
 
     @Role('ADMIN')

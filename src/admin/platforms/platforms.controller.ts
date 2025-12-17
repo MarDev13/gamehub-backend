@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/auth/decorators/roles.decorator';
@@ -6,6 +6,7 @@ import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
 import { PlatformsService } from './platforms.service';
 import { UpdatePlatformDto } from './dto/update-platform.dto';
 import { CreatePlatformDto } from './dto/create-platform.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @ApiTags('admin - platforms')
 @ApiBearerAuth()
@@ -23,8 +24,8 @@ export class PlatformsController {
 
     @Role('ADMIN')
     @Get()
-    findAll() {
-        return this.platformService.findAll();
+    findAll(@Query() pagination: PaginationDto) {
+        return this.platformService.findAll(pagination);
     }
 
     @Role('ADMIN')

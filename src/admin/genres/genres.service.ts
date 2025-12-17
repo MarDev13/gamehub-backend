@@ -2,6 +2,8 @@ import { Injectable, BadRequestException, NotFoundException } from "@nestjs/comm
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateGenreDto } from "src/admin/genres/dto/create-genre.dto";
 import { UpdateGenreDto } from "./dto/update-genre.dto";
+import { PaginationDto } from "src/common/dto/pagination.dto";
+import { buildPagination } from "src/common/utils/pagination.utils";
 
 @Injectable()
 export class GenresService {
@@ -20,10 +22,24 @@ export class GenresService {
             message: 'Género creado con éxito',
             genre,
         };
-    } async findAll() {
-        return this.prisma.genre.findMany({
-            orderBy: { name: 'asc' },
-        });
+    } 
+    async findAll(pagination: PaginationDto) {
+        const { skip, take, orderBy } = buildPagination(pagination);
+        const [items, total] = await this.prisma.$transaction([
+            this.prisma.genre.findMany({
+                take,
+                skip,
+                orderBy,
+
+            }),
+            this.prisma.genre.count(),
+        ]);
+        return {
+            page: pagination.page,
+            limit: pagination.limit,
+            total,
+            items
+        };
     }
 
     async findById(id: string) {

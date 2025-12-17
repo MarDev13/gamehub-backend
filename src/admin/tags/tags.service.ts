@@ -2,6 +2,8 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { buildPagination } from 'src/common/utils/pagination.utils';
 
 @Injectable()
 export class TagsService {
@@ -21,10 +23,22 @@ export class TagsService {
             tag,
         };
     }
-    async findAll(){
-        return this.prisma.tag.findMany({
-            orderBy: { name: 'asc' },
-        });
+    async findAll(pagination: PaginationDto){
+        const {skip, take, orderBy} = buildPagination(pagination);
+        const [items, total] = await this.prisma.$transaction([
+         this.prisma.tag.findMany({
+            take,
+            skip,
+            orderBy
+        }),
+        this.prisma.tag.count()
+        ]);
+        return {
+            page: pagination.page,
+            limit: pagination.limit,
+            total,
+            items,
+        }
     }
     async findById(id: string){
         const tag = await this.prisma.tag.findUnique({

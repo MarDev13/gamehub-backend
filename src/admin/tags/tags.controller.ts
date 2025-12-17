@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Patch, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Patch, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/auth/decorators/roles.decorator';
@@ -6,6 +6,7 @@ import { ApiTags, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { TagsService } from './tags.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @ApiTags('admin - tags')
 @ApiBearerAuth()
@@ -30,8 +31,8 @@ export class TagsController {
 
     @Role('ADMIN')
     @Get()
-    findAll() {
-        return this.tagsService.findAll();
+    findAll(@Query() pagination: PaginationDto) {
+        return this.tagsService.findAll(pagination);
     }
 
     @Role('ADMIN')
