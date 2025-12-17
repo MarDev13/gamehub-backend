@@ -28,7 +28,7 @@ export class PaginationDto{
         description: 'Campo por el que ordenar'
     })
     @IsOptional()
-    sort?: string = 'CreatedAt';
+    sort?: string = 'createdAt';
 
     @ApiPropertyOptional({
         example: 'desc',
