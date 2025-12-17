@@ -20,6 +20,7 @@ export class CreateGameDto {
    @MinLength(10)
    description?: string;
 
+   @ApiProperty({ example: 'https://cdn.gamehub.com/witcher3.jpg', required: false })
    @IsOptional()
    @IsString()
    imageUrl?: string;
@@ -63,6 +64,7 @@ export class CreateGameDto {
    @IsBoolean()
    isPublished?: boolean;
 
+   @ApiProperty({ enum: GameStatus, required: false })
    @IsOptional()
    @IsEnum(GameStatus)
    status?: GameStatus;
