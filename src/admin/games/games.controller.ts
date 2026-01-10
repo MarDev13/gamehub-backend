@@ -40,6 +40,14 @@ export class GamesController {
     }
 
     @Role('ADMIN')
+    @Get('metrics/count')
+    @ApiOperation({ summary: 'Obtener total de videojuegos' })
+    @ApiResponse({ status: 200, description: 'Total de videojuegos registrados' })
+    countGames() {
+        return this.gameService.countGames()
+    }
+
+    @Role('ADMIN')
     @Get(':id')
     @ApiOperation({ summary: 'Obtener juego por ID' })
     @ApiParam({ name: 'id', description: 'ID del juego (UUID)' })

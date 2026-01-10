@@ -28,6 +28,13 @@ export class UsersService {
             items
         };
     }
+    async getUsersCount() {
+    const total = await this.prisma.user.count();
+
+    return {
+        total,
+    };
+}
     async findById(id: string) {
         const user = await this.prisma.user.findUnique({
             where: { id }

@@ -92,6 +92,10 @@ export class GamesService {
             game,
         };
     }
+    async countGames() {
+        const total = await this.prisma.game.count()
+        return { total }
+    }
 
     async findAll(pagination: PaginationDto) {
         const { skip, take, orderBy } = buildPagination(pagination);

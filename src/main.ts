@@ -17,6 +17,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: { persistAuthorization: true },
   });
+  
 
   const env = process.env.NODE_ENV || 'development';
   const port = Number(process.env.PORT) || 3000;

@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from "bcryptjs";
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 import { JwtService } from "@nestjs/jwt";
 import { RoleName } from "@prisma/client";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 
 @Injectable()
 
@@ -73,4 +74,48 @@ export class AuthService {
             },
         };
     }
+    async updateProfile(userId: string, dto: UpdateProfileDto) {
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new NotFoundException("Usuario no encontrado");
+  }
+
+  const updatedUser = await this.prisma.user.update({
+    where: { id: userId },
+    data: {
+      email: dto.email,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+    },
+  });
+
+  return {
+    message: "Perfil actualizado correctamente",
+    user: updatedUser,
+  };
+}
+async getProfile(userId: string) {
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+    include: {
+      role: true,
+    },
+  });
+
+  if (!user) {
+    throw new NotFoundException("Usuario no encontrado");
+  }
+
+  return {
+    id: user.id,
+    email: user.email,
+    userName: user.userName,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    role: user.role.name, 
+  };
+}
 }

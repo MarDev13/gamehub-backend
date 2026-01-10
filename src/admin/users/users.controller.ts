@@ -27,6 +27,13 @@ export class UsersController {
     findAll(@Query() pagination: PaginationDto) {
         return this.userService.findAll(pagination);
     }
+    @Role('ADMIN')
+    @Get('metrics/count')
+    @ApiOperation({ summary: 'Obtener número total de usuarios' })
+    @ApiResponse({ status: 200, description: 'Número total de usuarios' })
+    getUsersCount() {
+        return this.userService.getUsersCount();
+    }
 
     @Role('ADMIN')
     @Get(':id')
