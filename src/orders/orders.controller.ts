@@ -6,7 +6,7 @@ import {
   Req,
   Body,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { OrdersService } from "./orders.service";
 
 @Controller("orders")
