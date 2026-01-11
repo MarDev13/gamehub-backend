@@ -11,9 +11,10 @@ import { GenresModule } from './admin/genres/genres.module';
 import { AdminModule } from './admin/admin.module';
 import { ShopModule } from './shop/shop.module';
 import { RawgModule } from './rawg/rawg.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule, GenresModule, AdminModule, ShopModule, RawgModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PrismaModule, AuthModule, GenresModule, AdminModule, ShopModule, RawgModule, OrdersModule],
   controllers: [AppController, AdminController, UserController],
   providers: [AppService, PrismaService],
 })
