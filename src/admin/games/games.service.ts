@@ -5,10 +5,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { GameStatus } from '@prisma/client';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { buildPagination } from 'src/common/utils/pagination.utils';
+import { RawgService } from 'src/rawg/rawg.service';
 
 @Injectable()
 export class GamesService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+    private readonly prisma: PrismaService,
+    private readonly rawgService: RawgService,
+  ) {}
 
     private calculatePricing(price: number, discountPct?: number) {
         if (!discountPct || discountPct <= 0) {
@@ -255,4 +259,54 @@ export class GamesService {
             deleteGame,
         };
     }
+
+    async importFromRawg() {
+        const rawgData = await this.rawgService.getRetroCozyGames(1, 30);
+
+        let imported = 0;
+        const importedTitles: string[] = [];
+
+        for (const game of rawgData.results) {
+            const exists = await this.prisma.game.findFirst({
+                where: { title: game.name },
+            });
+
+            if (exists) continue;
+
+            await this.prisma.game.create({
+                data: {
+                    title: game.name,
+                    description: game.description_raw ?? "Descripción no disponible",
+                    imageUrl: game.background_image,
+                    price: this.generatePrice(),
+                    stock: 999,
+                    isPublished: true,
+                    status: "ACTIVE",
+                    genre: {
+                        connectOrCreate: {
+                            where: { name: "Retro & Cozy" },
+                            create: { name: "Retro & Cozy" },
+                        },
+                    },
+                },
+            });
+
+            imported++;
+            importedTitles.push(game.name);
+        }
+
+        return {
+            imported,
+            importedTitles,
+            message:
+                imported === 0
+                    ? "No hay juegos nuevos retro y cozy en RAWG. El catálogo está actualizado."
+                    : `Importados ${imported} juegos nuevos`,
+        };
+    }
+
+    private generatePrice() {
+        return Number((Math.random() * (79 - 29) + 29).toFixed(2));
+    }
 }
+

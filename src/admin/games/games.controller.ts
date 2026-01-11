@@ -8,6 +8,7 @@ import { UpdateGameDto } from './dto/update-game.dto';
 import { CreateGameDto } from './dto/create-game.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ParseUUIDPipe } from '@nestjs/common';
+import { RawgService } from 'src/rawg/rawg.service';
 
 @ApiTags('admin - games')
 @ApiBearerAuth()
@@ -15,7 +16,10 @@ import { ParseUUIDPipe } from '@nestjs/common';
 @Controller('admin/games')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class GamesController {
-    constructor(private readonly gameService: GamesService) { }
+    constructor(
+        private readonly gameService: GamesService,
+        private readonly rawgService: RawgService,
+    ) { }
 
     @Role('ADMIN')
     @Post()
@@ -87,4 +91,11 @@ export class GamesController {
     deleteGame(@Param('id', new ParseUUIDPipe()) id: string) {
         return this.gameService.deleteGame(id);
     }
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Role("ADMIN")
+    @Post("import-rawg")
+    async importRawgGames() {
+        return this.gameService.importFromRawg();
+    }
+
 }
