@@ -27,11 +27,11 @@ async function bootstrap() {
     app.enableCors();
     console.log('CORS enabled for all origins in development mode');
   } else {
-    app.enableCors({
-      origin: '',
-      credentials: true,
-    });
-    console.log('CORS enabled for specific orgin in production mode');
+   app.enableCors({
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+})
   }
 
   app.useGlobalPipes(
