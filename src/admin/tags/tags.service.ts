@@ -1,9 +1,9 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { CreateTagDto } from './dto/create-tag.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { buildPagination } from 'src/common/utils/pagination.utils';
+import { PrismaService } from '../../prisma/prisma.service';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { buildPagination } from '../../common/utils/pagination.utils';
 
 @Injectable()
 export class TagsService {

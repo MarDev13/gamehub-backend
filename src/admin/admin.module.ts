@@ -8,7 +8,7 @@ import { GamesService } from './games/games.service';
 import { GamesModule } from './games/games.module';
 import { PlatformsModule } from './platforms/platforms.module';
 import { UsersModule } from './users/users.module';
-import { RawgModule } from "src/rawg/rawg.module";
+import { RawgModule } from "../rawg/rawg.module";
 @Module({
     controllers: [AdminController, GamesController],
     providers: [AdminService, PrismaService, GamesService],

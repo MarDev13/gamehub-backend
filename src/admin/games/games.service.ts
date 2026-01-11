@@ -1,11 +1,11 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { CreateGameDto } from './dto/create-game.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { GameStatus } from '@prisma/client';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { buildPagination } from 'src/common/utils/pagination.utils';
-import { RawgService } from 'src/rawg/rawg.service';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { buildPagination } from '../../common/utils/pagination.utils';
+import { RawgService } from '../../rawg/rawg.service';
 
 @Injectable()
 export class GamesService {

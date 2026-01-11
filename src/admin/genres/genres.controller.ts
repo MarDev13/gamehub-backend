@@ -1,12 +1,12 @@
 import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Role } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { Role } from '../../auth/decorators/roles.decorator';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { GenresService } from './genres.service';
-import { CreateGenreDto } from 'src/admin/genres/dto/create-genre.dto';
+import { CreateGenreDto } from '../../admin/genres/dto/create-genre.dto';
 import { UpdateGenreDto } from './dto/update-genre.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { ParseUUIDPipe } from '@nestjs/common';
 
 @ApiTags('admin - genres')

@@ -1,14 +1,14 @@
 import { Controller, Post, Get, Patch, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Role } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { Role } from '../../auth/decorators/roles.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery, ApiBearerAuth } from '@nestjs/swagger';
 import { GamesService } from './games.service';
 import { UpdateGameDto } from './dto/update-game.dto';
 import { CreateGameDto } from './dto/create-game.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { ParseUUIDPipe } from '@nestjs/common';
-import { RawgService } from 'src/rawg/rawg.service';
+import { RawgService } from '../../rawg/rawg.service';
 
 @ApiTags('admin - games')
 @ApiBearerAuth()

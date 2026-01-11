@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Req, Post, Body } from '@nestjs/common';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Role } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Role } from '../auth/decorators/roles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { CreateGenreDto } from './genres/dto/create-genre.dto';
